@@ -1,0 +1,73 @@
+
+.container
+    padding: 24px
+
+    .btn-group
+        display: flex
+
+    form
+        margin-bottom: 24px
+
+    .header
+        display: flex
+        flex-direction: row
+        margin-bottom: 24px
+        justify-content: space-between
+
+        @media (max-width: 768px)
+            flex-direction: column
+
+        h1
+            font-weight: bold
+
+    .alert
+        padding: 12px 24px
+        border-radius: 8px
+        margin-bottom: 12px
+
+        &.alert-success
+            background-color: #a1fccf
+            color: green
+
+        &.alert-danger
+            background-color: #fa9a9a
+            color: red
+
+    .input
+        width: 100%
+
+        .alert-error
+            display: none
+            margin-top: 12px
+            color: red
+            font-weight: bold
+            font-size: .8rem
+
+        &.mat-form-field-invalid .alert-error.show
+            display: block
+
+        &.mat-form-field-invalid .alert-error.hide
+            display: none
+
+    .grid
+        display: grid
+        grid-template-columns: 1fr 1fr 1fr 1fr
+        grid-gap: 24px
+
+        @media (max-width: 1048px)
+            grid-template-columns: 1fr 1fr 1fr
+
+        @media (max-width: 790px)
+            grid-template-columns: 1fr 1fr
+
+        @media (max-width: 535px)
+            grid-template-columns: 1fr
+
+        .card
+            min-width: 200px
+            background-color: rgba(0,0,0,.04)
+
+        .mat-card-content
+            height: 200px
+            overflow: overlay
+            word-break: break-word

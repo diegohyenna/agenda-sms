@@ -1,0 +1,152 @@
+<div class="container">
+  <div class="header">
+    <h1>Lista de SMS agendados</h1>
+    <button mat-raised-button color="primary" (click)="handleSubmit()">
+      Adicionar nova mensagem
+    </button>
+  </div>
+
+  <div
+    *ngIf="this.alert.status"
+    class="alert"
+    [ngClass]="alert.type === 'success' ? 'alert-success' : 'alert-danger'"
+  >
+    {{ this.alert.message }}
+  </div>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="opened">
+    <h2>Adicionar novo</h2>
+    <mat-form-field class="input" appearance="fill">
+      <mat-label for="number">Número de telefone</mat-label>
+      <input
+        id="number"
+        matInput
+        formControlName="number"
+        placeholder="Digite aqui o número para onde enviará a mensagem"
+      />
+      <div
+        *ngIf="this.form.get('number')?.errors?.required"
+        class="alert-error"
+        [ngClass]="this.form.get('number')?.errors?.required ? 'show' : 'hide'"
+      >
+        Esse campo é obrigatório
+      </div>
+    </mat-form-field>
+    <mat-form-field class="input" appearance="fill">
+      <mat-label>Assunto</mat-label>
+      <input
+        matInput
+        formControlName="subject"
+        placeholder="Digite aqui o assunto da mensagem"
+      />
+      <div
+        *ngIf="this.form.get('subject')?.errors?.required"
+        class="alert-error"
+        [ngClass]="this.form.get('subject')?.errors?.required ? 'show' : 'hide'"
+      >
+        Esse campo é obrigatório
+      </div>
+    </mat-form-field>
+    <mat-form-field class="input" appearance="fill">
+      <mat-label>Agende uma data</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="datetime" />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+      <div
+        *ngIf="this.form.get('datetime')?.errors?.required"
+        class="alert-error"
+        [ngClass]="
+          this.form.get('datetime')?.errors?.required ? 'show' : 'hide'
+        "
+      >
+        Esse campo é obrigatório
+      </div>
+    </mat-form-field>
+    <mat-form-field class="input" appearance="fill">
+      <mat-label>Mensagem</mat-label>
+      <textarea
+        matInput
+        formControlName="message"
+        placeholder="Digite a mensagem de sms"
+      ></textarea>
+      <div
+        *ngIf="this.form.get('message')?.errors?.required"
+        class="alert-error"
+        [ngClass]="this.form.get('message')?.errors?.required ? 'show' : 'hide'"
+      >
+        Esse campo é obrigatório
+      </div>
+    </mat-form-field>
+    <div class="btn-group">
+      <button
+        *ngIf="!this.edit"
+        type="submit"
+        [disabled]="this.form.invalid"
+        mat-raised-button
+        color="accent"
+        style="flex-grow: 1"
+      >
+        Salvar
+      </button>
+      <button
+        *ngIf="this.edit"
+        type="button"
+        [disabled]="this.form.invalid"
+        mat-raised-button
+        color="accent"
+        style="flex-grow: 1"
+        (click)="this.onEdit(this.form.value)"
+      >
+        Salvar
+      </button>
+      <button
+        type="button"
+        mat-raised-button
+        style="margin: 0 12px; flex-grow: 1"
+        (click)="this.clearItems()"
+      >
+        Fechar
+      </button>
+
+      <div *ngIf="!this.edit" style="flex-grow: 2">
+        <h3>Adicionar via CSV</h3>
+        <input type="file" (change)="importCSV($event)" />
+      </div>
+    </div>
+  </form>
+  <hr />
+  <h2>Resultados</h2>
+  <div class="grid">
+    <mat-card class="card" *ngFor="let smsItem of smsLists">
+      <mat-card-header>
+        <div mat-card-avatar>
+          <button
+            mat-icon-button
+            [matMenuTriggerFor]="menu"
+            aria-label="Example icon-button with a menu"
+          >
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="this.handleChange(smsItem.id)">
+              <mat-icon>edit</mat-icon>
+              <span>Editar</span>
+            </button>
+            <button mat-menu-item (click)="this.handleDelete(smsItem.id)">
+              <mat-icon>delete</mat-icon>
+              <span>Excluir</span>
+            </button>
+          </mat-menu>
+        </div>
+        <mat-card-title>{{ smsItem.subject }}</mat-card-title>
+        <mat-card-subtitle>{{ smsItem.number }}</mat-card-subtitle>
+        <mat-card-subtitle>{{ smsItem.datetime | date }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content class="mat-card-content">
+        <strong>Messagem</strong>
+        <p>
+          {{ smsItem.message }}
+        </p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
